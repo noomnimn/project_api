@@ -63,7 +63,7 @@ exports.updatePJ = (req, res, next) => {
         money_used : body.money_used ? body.money_used : null
     }
     req.getConnection(function (err, connection) {
-        connection.query("update projects set ? where pj_id =?", [post, id], function (err, results) {
+        connection.query("update projects_check set ? where pj_id =?", [post, id], function (err, results) {
             if (err) return next(err)
             res.send({ status: 'ok', results })
         })

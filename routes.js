@@ -8,6 +8,7 @@ const allproject = require('./controllers/project')
 const budget = require('./controllers/select')
 const update = require('./controllers/update')
 const chart = require('./controllers/chart')
+const check = require('./controllers/projects_ch')
 
 
 module.exports = function (app) {
@@ -63,9 +64,13 @@ module.exports = function (app) {
    app.get('/api/v1/project/getsumMoneyType', chart.sumtype)
    app.get('/api/v1/project/getMoneyUsed' , chart.chart_type)
    app.get('/api/v1/project/Excellence' , chart.excellence)
+   app.get('/api/v1/project/sumpriceBygroup' , chart.sumpriceBygroup)
+   app.get('/api/v1/project/sumary' , chart.sumary)
 
-   // ap
-   app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById)
+   
+   app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById) // ap
+   app.get('/api/v1/project/projectCheck', check.findAll) // check
+   app.get('/api/v1/project/projectCheck/:id', check.findprojectChById) // check
 
 
 }
