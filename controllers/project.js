@@ -13,7 +13,7 @@ exports.findAll = (req, res, next) => {
 exports.findProject = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "select * from projects ORDER BY pj_id ASC";
+        var sql = "select * from project ORDER BY pj_id ASC";
         connection.query(sql, (err, results) => {
             if (err) return next(err)
             res.send(results)
@@ -99,8 +99,8 @@ exports.createProjects = (req, res, next) => {
         project_code : body.project_code ? body.project_code : null,
 
     }
-    console.log(post)
-    post.length = post.length.join(',');
+   // console.log(post)
+   // post.length = post.length.join(',');
     req.getConnection(function (err, connection) {
         connection.query("SELECT name FROM projects  WHERE name= ?", [post.name], function (err, results) {
             if (err) return next(err)
@@ -156,9 +156,10 @@ exports.updateProjects = (req, res, next) => {
 
     }
     req.getConnection(function (err, connection) {
-        connection.query("update projects set ? where pj_id =?", [post, id], function (err, results) {
+        connection.query("update project set ? where pj_id =?", [post, id], function (err, results) {
             if (err) return next(err)
             res.send({ status: 'ok', results })
         })
     })
 }
+

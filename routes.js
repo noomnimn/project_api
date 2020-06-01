@@ -53,6 +53,10 @@ module.exports = function (app) {
    app.put('/api/v1/project/update/:id', update.updatePJ)
    app.get('/api/v1/project/getProjectapprove', allproject.findProjectApp) //approve
    app.put('/api/v1/project/updatemoney/:id', update.updateMoneyUsed)
+   app.put('/api/v1/project/updatecode/:id', update.updateCode)
+   app.post('/api/v1/project/createdplan', update.createProject)
+
+
 
 
    // chart
