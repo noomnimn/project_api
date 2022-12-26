@@ -55,12 +55,12 @@ exports.updatePJ = (req, res, next) => {
     var id = parseInt(req.params.id)
     var { body } = req
     var post = {
-        dt_date: body.dt_date ? body.dt_date : null,
-        st_date: body.st_date ? body.st_date : null,
-        reply_date: body.reply_date ? body.reply_date : null,
-        plan_date : body.plan_date ? body.plan_date : null,
-     //   dep_date : body.dep_date ? body.dep_date : null,
-      //  pro_pj : body.pro_pj ? body.pro_pj : null,
+       // dt_date: body.dt_date ? body.dt_date : null,
+       // st_date: body.st_date ? body.st_date : null,
+       // reply_date: body.reply_date ? body.reply_date : null,
+       // plan_date : body.plan_date ? body.plan_date : null,
+       // plan_st_date : body.plan_st_date ? body.plan_st_date : null,
+       // begin_date : body.begin_date ? body.begin_date : null,
         status_plan : body.status_plan ? body.status_plan : null,
 
     }
@@ -76,8 +76,8 @@ exports.updateMoneyUsed = (req, res, next) => {
     var id = parseInt(req.params.id)
     var { body } = req
     var post = {
-        pro_pj : body.pro_pj ? body.pro_pj : null,
-        status : body.status ? body.status : null
+        status : body.status ? body.status : null,
+        money_used : body.money_used ? body.money_used : null,
 
     }
     req.getConnection(function (err, connection) {
@@ -93,6 +93,8 @@ exports.updateCode = (req, res, next) => {
     var { body } = req
     var post = {
         project_code : body.project_code ? body.project_code : null,
+        begin_date : body.begin_date ? body.begin_date : null,
+
 
     }
     req.getConnection(function (err, connection) {
@@ -103,6 +105,65 @@ exports.updateCode = (req, res, next) => {
     })
 }
 
+exports.update_dateDt = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        dt_date : body.dt_date ? body.dt_date : null,
+
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update project set ? where pj_id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
+
+exports.update_dateSt = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        st_date : body.st_date ? body.st_date : null,
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update project set ? where pj_id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
+exports.update_dateplanSt = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        plan_st_date : body.plan_st_date ? body.plan_st_date : null,
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update project set ? where pj_id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
+
+exports.update_dateReply = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        reply_date : body.reply_date ? body.reply_date : null,
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update project set ? where pj_id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
 //*************************************** */
 exports.createProject = (req, res, next) => {
     var { body } = req
@@ -136,10 +197,12 @@ exports.createProject = (req, res, next) => {
         plan_date : body.plan_date ? body.plan_date : null,
         dep_date : body.dep_date ? body.dep_date : null,
         reply_date : body.reply_date ? body.reply_date : null,
+        plan_st_date : body.plan_st_date ? body.plan_st_date : null,
+        begin_date : body.begin_date ? body.begin_date : null,
         pro_pj : body.pro_pj ? body.pro_pj : null,
         money_used : body.money_used ? body.money_used : null,
         project_code : body.project_code ? body.project_code : null,
-
+        status_plan : body.status_plan ? body.status_plan : null,
     }
     console.log(post)
     post.length = post.length.join(',');

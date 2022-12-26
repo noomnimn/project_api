@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 exports.findDataById = (req, res, next) => {
     var id = parseInt(req.params.id)

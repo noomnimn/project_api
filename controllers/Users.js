@@ -1,6 +1,6 @@
 const jwt = require('jwt-simple')
 const config = require('../config')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 function tokenForUser(user) {
     const timestamp = new Date().getTime()

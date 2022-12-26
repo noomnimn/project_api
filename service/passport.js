@@ -2,7 +2,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local')
 const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const config = require('../config')
 const localOptions = { passReqToCallback: true }
 const localLogin = new LocalStrategy(localOptions, function (req, username, password, done) {
@@ -11,22 +11,22 @@ const localLogin = new LocalStrategy(localOptions, function (req, username, pass
         connection.query("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
             if (err) return done(err)
             if (!row.length) return done(null, false)
-            bcrypt.compare(password, row[0].password, function (err, res) {
+           /* bcrypt.compare(password, row[0].password, function (err, res) {
                 if (res) {
                     console.log(row[0])
                     return done(null, row[0])
                 } else {
                     return done(null, false)
                 }
-            });
-            // if (row[0].password !== password) {
-            //     return done(null, false)
-            // } else {
+            });*/
+             if (row[0].password !== password) {
+                 return done(null, false)
+             } else {
             //     // if (row[0].image != null) {
             //     //     row[0].image = row[0].image.toString('utf-8');
             //     // }
-            //     return done(null, row[0])
-            // }
+                 return done(null, row[0])
+             }
         })
     })
 })

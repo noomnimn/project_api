@@ -9,6 +9,12 @@ const budget = require('./controllers/select')
 const update = require('./controllers/update')
 const chart = require('./controllers/chart')
 const check = require('./controllers/projects_ch')
+const newproject = require('./controllers/summary')
+const budget2022 = require('./controllers/budget')
+const doc = require('./controllers/doc')
+const donate = require('./controllers/donate')
+const out = require('./controllers/out')
+
 
 
 module.exports = function (app) {
@@ -48,7 +54,7 @@ module.exports = function (app) {
    app.get('/api/v1/project/getMinistry', budget.findMinistry)
    app.get('/api/v1/project/getPolicy', budget.findPolicy)
    app.get('/api/v1/project/getStrategic', budget.findStrategic)
-   app.get('/api/v1/project/getMoney', budget.findMoneyType)
+   app.get('/api/v1/project/getMoneybytype', budget.findMoney)//
    app.get('/api/v1/project/getCategory', budget.findCategory)
    app.put('/api/v1/project/update/:id', update.updatePJ)
    app.get('/api/v1/project/getProjectapprove', allproject.findProjectApp) //approve
@@ -61,6 +67,9 @@ module.exports = function (app) {
 
    // chart
    app.get('/api/v1/project/findStatus', chart.findStatus)
+   app.get('/api/v1/project/findStDate', chart.findStDate)
+   app.get('/api/v1/project/findWait', chart.findWait)
+
    app.get('/api/v1/project/findExcellence', chart.findEx)
    app.get('/api/v1/project/findCount', chart.findCountbyGroup)
    app.get('/api/v1/project/getSum', chart.findSumbyGroup)
@@ -70,11 +79,75 @@ module.exports = function (app) {
    app.get('/api/v1/project/Excellence' , chart.excellence)
    app.get('/api/v1/project/sumpriceBygroup' , chart.sumpriceBygroup)
    app.get('/api/v1/project/sumary' , chart.sumary)
+   app.get('/api/v1/project/department_data' , chart.department_data)
+
 
    
    app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById) // ap
-   app.get('/api/v1/project/projectCheck', check.findAll) // check
+   app.get('/api/v1/project/projectCheck', check.findAll) // check //หน้าสถานะ
    app.get('/api/v1/project/projectCheck/:id', check.findprojectChById) // check
+
+   // getNewProject
+   app.get('/api/v1/project/getnewproject', newproject.newproject) // check
+   
+    app.put('/api/v1/project/updateDateDt/:id', update.update_dateDt)
+    app.put('/api/v1/project/updateDateSt/:id', update.update_dateSt)
+    app.put('/api/v1/project/updateDatePlanSt/:id', update.update_dateplanSt)
+    app.put('/api/v1/project/updateDateReply/:id', update.update_dateReply)
+
+    //------------------------------------------------------------------------------------**งบลงทุน
+   app.get('/api/budget/findAll', budget2022.findAll) // check
+   app.get('/api/budget/findUC', budget2022.findUC) // check
+
+   app.get('/api/budget/findBudgetById/:id', budget2022.findBudgetById)
+   app.put('/api/updateBudget/:id', budget2022.updateBudget)
+   app.post('/api/updateBudget', budget2022.add)
+
+   app.get('/api/budget/findAllSum', budget2022.findBudgetSum)
+   app.get('/api/budget/findBudget/status', budget2022.findBudgetStatus)
+
+
+
+   //----------------------------------------------------------ส่วนของวันที่
+    app.put('/api/updateformPl/:id', budget2022.update_formPl)
+    app.put('/api/updateformDt/:id', budget2022.update_formDt)
+    app.put('/api/updateformSt/:id', budget2022.update_formSt)
+    app.put('/api/updateformEn/:id', budget2022.update_formEn)
+    app.put('/api/updateformPa/:id', budget2022.update_formPa)
+    app.put('/api/updateformDe/:id', budget2022.update_formDef)
+
+
+  //----------------------------------------------------------lสารบรรณ
+    app.post('/api/addDoc', doc.add)
+    app.put('/api/updateDoc/:id', doc.update)
+    app.get('/api/findDocById/:id', doc.findById)
+    app.get('/api/doc/findAll', doc.findAll) // check
+
+    app.post('/api/addDocSend', doc.addDocSend)
+    app.get('/api/doc/findAllSend', doc.findAllSend)
+    app.post('/api/addDocSSW', doc.addDocSw)
+    app.get('/api/doc/findDocSSW', doc.findAllDocSSW)
+
+  //----------------------------------------------------------บริจาค
+    app.get('/api/donate/findAll', donate.findAll)
+
+    //----------------------------------------------------------สรุปงบลงทุน
+    app.get('/api/findBudgetMoney/dashboard', budget2022.findBudgetMoney)
+
+    //----------------------------------------------------------นอกแผน
+    app.get('/api/out/findAll', out.findAll)
+    app.get('/api/out/findById/:id', out.findById)
+    app.put('/api/updateOut/:id', out.updateOut)
+    app.post('/api/addOut', out.addOut)
+    app.put('/api/updateformPl/:id', budget2022.update_formPl)
+    app.put('/api/updateformDt/:id', budget2022.update_formDt)
+    app.put('/api/updateformSt/:id', budget2022.update_formSt)
+    app.put('/api/updateformEn/:id', budget2022.update_formEn)
+    app.put('/api/updateformPa/:id', budget2022.update_formPa)
+    app.put('/api/updateformDe/:id', budget2022.update_formDef)
+
+    app.get('/api/out/dashboard', newproject.outTable)
+    app.get('/api/in/dashboard', newproject.inTable)
 
 
 }

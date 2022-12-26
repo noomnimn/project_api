@@ -89,27 +89,33 @@ exports.createProjects = (req, res, next) => {
         department_f: body.department_f ? body.department_f : null,
         length: body.length ? body.length : null,
         status: body.status ? body.status : null,
-        dt_date : body.dt_date ? body.dt_date : null,
-        st_date : body.st_date ? body.st_date : null,
-        plan_date : body.plan_date ? body.plan_date : null,
-        dep_date : body.dep_date ? body.dep_date : null,
-        reply_date : body.reply_date ? body.reply_date : null,
-        pro_pj : body.pro_pj ? body.pro_pj : null,
+      //  dt_date : body.dt_date ? body.dt_date : null,
+      //  st_date : body.st_date ? body.st_date : null,
+       // plan_date : body.plan_date ? body.plan_date : null,
+       // dep_date : body.dep_date ? body.dep_date : null,
+       // reply_date : body.reply_date ? body.reply_date : null,
+       // pro_pj : body.pro_pj ? body.pro_pj : null,
         money_used : body.money_used ? body.money_used : null,
         project_code : body.project_code ? body.project_code : null,
+        item_food : body.item_food ? body.item_food : null,
+        item_food_pp : body.item_food_pp ? body.item_food_pp : null,
+        item_food_price : body.item_food_price ? body.item_food_price : null,
+        item_food_am : body.item_food_am ? body.item_food_am : null,
+        item_food_tot : body.item_food_tot ? body.item_food_tot : null,
 
     }
-   // console.log(post)
+    console.log(post)
    // post.length = post.length.join(',');
+    post.reply_date = post.reply_date.join('-');
     req.getConnection(function (err, connection) {
-        connection.query("SELECT name FROM projects  WHERE name= ?", [post.name], function (err, results) {
+        connection.query("SELECT name FROM project_sum  WHERE name= ?", [post.name], function (err, results) {
             if (err) return next(err)
             if (results.length > 0) {
                 res.send({
                     status: 201, message: 'โครงการซ้ำ'
                 })
             } else {
-                connection.query("insert into projects set ?", post, (err, results) => {
+                connection.query("insert into project_sum set ?", post, (err, results) => {
                     if (err) return next(err)
                     res.send({ status: 'ok', results })
                 })
@@ -150,7 +156,7 @@ exports.updateProjects = (req, res, next) => {
         plan_date : body.plan_date ? body.plan_date : null,
         dep_date : body.dep_date ? body.dep_date : null,
         reply_date : body.reply_date ? body.reply_date : null,
-        pro_pj : body.pro_pj ? body.pro_pj : null,
+        // pro_pj : body.pro_pj ? body.pro_pj : null,
         money_used : body.money_used ? body.money_used : null,
         project_code : body.project_code ? body.project_code : null,
 

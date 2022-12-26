@@ -1,7 +1,7 @@
 exports.findAll = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "SELECT * from project WHERE project_code IS NOT NULL ORDER BY updated desc";
+        var sql = "SELECT * from project WHERE begin_date IS NOT NULL order by updated asc";
         connection.query(sql, (err, results) => {
             if (err) return next(err)
             res.send(results)
