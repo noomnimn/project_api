@@ -66,7 +66,7 @@ exports.findById = (req, res, next) => {
 exports.findAll = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "select * from doc_osm";
+        var sql = "select * from doc_osm ORDER BY id DESC";
         // var params = "%" + req.query.term + "%"
         connection.query(sql, (err, results) => {
             if (err) return next(err)
@@ -85,6 +85,8 @@ exports.addDocSend = (req, res, next) => {
         doc_to: body.doc_to ? body.doc_to : null,
         doc_name: body.doc_name ? body.doc_name : null,
         detail: body.detail ? body.detail : null,
+        doc_type: body.doc_type ? body.doc_type : null,
+
     }
     console.log(post)
    // post.length = post.length.join(',');
@@ -105,15 +107,45 @@ exports.addDocSend = (req, res, next) => {
         })
     })
 }
+exports.updateSend = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        doc_no: body.doc_no ? body.doc_no : null,
+        doc_to: body.doc_to ? body.doc_to : null,
+        doc_name: body.doc_name ? body.doc_name : null,
+        detail: body.detail ? body.detail : null,
+        doc_type: body.doc_type ? body.doc_type : null,
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update doc_send set ? where id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
 
 exports.findAllSend = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "select * from doc_send";
+        var sql = "select * from doc_send ORDER BY id DESC";
         // var params = "%" + req.query.term + "%"
         connection.query(sql, (err, results) => {
             if (err) return next(err)
             res.send(results)
+        })
+    })
+}
+
+exports.findSendById = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "select * from doc_send where id = ? ";
+        connection.query(sql, [id], (err, results) => {
+            if (err) return next(err)
+            res.send(results[0])
         })
     })
 }
@@ -129,6 +161,8 @@ exports.addDocSw = (req, res, next) => {
         doc_to: body.doc_to ? body.doc_to : null,
         doc_name: body.doc_name ? body.doc_name : null,
         detail: body.detail ? body.detail : null,
+        doc_type: body.doc_type ? body.doc_type : null
+
     }
     console.log(post)
    // post.length = post.length.join(',');
@@ -149,6 +183,26 @@ exports.addDocSw = (req, res, next) => {
         })
     })
 }
+//--------------------------------------------------------อัพเดตฟอร์ม รพ. 2/03/2566
+exports.updateSsw = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    var { body } = req
+    var post = {
+        doc_no: body.doc_no ? body.doc_no : null,
+        type: body.type ? body.type : null,
+        doc_to: body.doc_to ? body.doc_to : null,
+        doc_name: body.doc_name ? body.doc_name : null,
+        detail: body.detail ? body.detail : null,
+        doc_type: body.doc_type ? body.doc_type : null,
+
+    }
+    req.getConnection(function (err, connection) {
+        connection.query("update doc_ssw set ? where id =?", [post, id], function (err, results) {
+            if (err) return next(err)
+            res.send({ status: 'ok', results })
+        })
+    })
+}
 
 exports.findAllDocSSW = (req, res, next) => {
     req.getConnection((err, connection) => {
@@ -158,6 +212,18 @@ exports.findAllDocSSW = (req, res, next) => {
         connection.query(sql, (err, results) => {
             if (err) return next(err)
             res.send(results)
+        })
+    })
+}
+
+exports.findSwById = (req, res, next) => {
+    var id = parseInt(req.params.id)
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "select * from doc_ssw where id = ? ";
+        connection.query(sql, [id], (err, results) => {
+            if (err) return next(err)
+            res.send(results[0])
         })
     })
 }

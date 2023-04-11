@@ -202,7 +202,7 @@ exports.update_formDef = (req, res, next) => {
 exports.findBudgetSum = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "SELECT p.money_so AS money, COUNT(`money_so`) AS total, (SUM(sum)) AS sumprice FROM `budget2022` p GROUP BY p.`money_so` ASC";
+        var sql = "SELECT p.money_g AS money, COUNT(`money_so`) AS total, (SUM(sum)) AS sumprice FROM `budget2022` p GROUP BY p.`money_g` ASC";
         // var params = "%" + req.query.term + "%"
         connection.query(sql, (err, results) => {
             if (err) return next(err)
@@ -246,6 +246,33 @@ exports.findUC = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
         var sql = "select * from budget2022 WHERE money_so ='2566-70%UC' ";
+        // var params = "%" + req.query.term + "%"
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+
+//------------------------------------------------------------ตารางบำรุง
+exports.findHosMoney = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "select * from budget2022 WHERE money_so ='เงินบำรุง รพ.' ";
+        // var params = "%" + req.query.term + "%"
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+
+
+//------------------------------------------------------------ตารางบำรุง
+exports.findDonate = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "select * from budget2022 WHERE id BETWEEN 126 AND 134;";
         // var params = "%" + req.query.term + "%"
         connection.query(sql, (err, results) => {
             if (err) return next(err)

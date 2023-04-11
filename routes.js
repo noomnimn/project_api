@@ -98,6 +98,8 @@ module.exports = function (app) {
     //------------------------------------------------------------------------------------**งบลงทุน
    app.get('/api/budget/findAll', budget2022.findAll) // check
    app.get('/api/budget/findUC', budget2022.findUC) // check
+   app.get('/api/budget/findHos', budget2022.findHosMoney) // check
+   app.get('/api/budget/findDon', budget2022.findDonate) // check
 
    app.get('/api/budget/findBudgetById/:id', budget2022.findBudgetById)
    app.put('/api/updateBudget/:id', budget2022.updateBudget)
@@ -124,9 +126,13 @@ module.exports = function (app) {
     app.get('/api/doc/findAll', doc.findAll) // check
 
     app.post('/api/addDocSend', doc.addDocSend)
+    app.put('/api/updateDocSend/:id', doc.updateSend)
+    app.get('/api/findSendById/:id', doc.findSendById)
     app.get('/api/doc/findAllSend', doc.findAllSend)
     app.post('/api/addDocSSW', doc.addDocSw)
     app.get('/api/doc/findDocSSW', doc.findAllDocSSW)
+    app.put('/api/updateDocSw/:id', doc.updateSsw)
+    app.get('/api/findSwById/:id', doc.findSwById)
 
   //----------------------------------------------------------บริจาค
     app.get('/api/donate/findAll', donate.findAll)
@@ -149,5 +155,8 @@ module.exports = function (app) {
     app.get('/api/out/dashboard', newproject.outTable)
     app.get('/api/in/dashboard', newproject.inTable)
 
+    app.get('/api/donate/:id', donate.findById)
+    app.put('/api/updateDonate/:id', donate.update)
+    app.post('/api/addDonate', donate.add)
 
 }
