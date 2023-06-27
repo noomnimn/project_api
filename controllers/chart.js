@@ -178,3 +178,41 @@ exports.department_data = (req, res, next) => {
     })
 }
 
+//----------------------------------------------------------- รวมตารางงบลงทุน ล่าง
+exports.sumaryBudget = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT SUM(sum) sum_total,COUNT(*) n, " +
+            "(SELECT COUNT(*) FROM budget2022 WHERE status IS NULL) AS A1, " +
+			"(SELECT COUNT(*) FROM budget2022 WHERE status ='พัสดุดำเนินการ') AS A2, " +
+            "(SELECT COUNT(*) FROM budget2022 WHERE status ='สิ้นสุดโครงการ') AS A3, " +
+			"(SELECT SUM(sum) FROM budget2022 WHERE status IS NULL) AS B1, " +
+			"(SELECT SUM(sum) FROM budget2022 WHERE status ='พัสดุดำเนินการ') AS B2, " +
+            "(SELECT SUM(sum) FROM budget2022 WHERE status ='สิ้นสุดโครงการ') AS B3 " +
+            "FROM budget2022;";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+
+//----------------------------------------------------------- รวมตารางงบลงทุน ล่าง
+exports.sumaryBudgetOut = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT SUM(sum) sum_total,COUNT(*) n, " +
+            "(SELECT COUNT(*) FROM budget_out WHERE status IS NULL) AS A1, " + 
+			"(SELECT COUNT(*) FROM budget_out WHERE status ='พัสดุดำเนินการ') AS A2, " +
+            "(SELECT COUNT(*) FROM budget_out WHERE status ='สิ้นสุดโครงการ') AS A3, " +
+			"(SELECT SUM(sum) FROM budget_out WHERE status IS NULL) AS B1, " + 
+			"(SELECT SUM(sum) FROM budget_out WHERE status ='พัสดุดำเนินการ') AS B2, " +
+            "(SELECT SUM(sum) FROM budget_out WHERE status ='สิ้นสุดโครงการ') AS B3 " +
+            "FROM budget_out;";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+

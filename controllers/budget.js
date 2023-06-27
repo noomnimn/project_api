@@ -214,7 +214,13 @@ exports.findBudgetSum = (req, res, next) => {
 exports.findBudgetStatus = (req, res, next) => {
     req.getConnection((err, connection) => {
         if (err) return next(err)
-        var sql = "SELECT p.money_so AS money, COUNT(`money_so`) AS total, (SUM(price)) AS sumprice,(SELECT COUNT(*) FROM budget2022 a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS WA, (SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'พัสดุดำเนินการ' AND b.money_so = p.money_so ) AS ST, (SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'สิ้นสุดโครงการ' AND b.money_so = p.money_so ) AS EN, (SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'ยกเลิก' AND b.money_so = p.money_so ) AS CA FROM `budget2022` p GROUP BY p.`money_so` ASC";
+        var sql = "SELECT p.money_g AS money, COUNT(`money_g`) AS total, " +
+        "(SUM(price)) AS sumprice, " +
+        "(SELECT COUNT(*) FROM budget2022 a WHERE a.status IS NULL AND a.money_g = p.money_g ) AS WA, " +
+        "(SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'พัสดุดำเนินการ' AND b.money_g = p.money_g ) AS ST, " +
+        "(SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'สิ้นสุดโครงการ' AND b.money_g = p.money_g ) AS EN, " +
+        "(SELECT COUNT(*) FROM budget2022 b WHERE b.status = 'ยกเลิก' AND b.money_g = p.money_g ) AS CA " +
+        "FROM `budget2022` p GROUP BY p.`money_g` ASC";
         // var params = "%" + req.query.term + "%"
         connection.query(sql, (err, results) => {
             if (err) return next(err)
