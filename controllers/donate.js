@@ -33,6 +33,7 @@ exports.update = (req, res, next) => {
         money_s: body.money_s ? body.money_s : null,
         money_p: body.money_p ? body.money_p : null,
         money_u: body.money_u ? body.money_u : null,
+        pay: body.pay ? body.pay : null,
     }
     req.getConnection(function (err, connection) {
         connection.query("update money_donate set ? where id =?", [post, id], function (err, results) {
@@ -54,6 +55,7 @@ exports.add = (req, res, next) => {
         money_s: body.money_s ? body.money_s : null,
         money_p: body.money_p ? body.money_p : null,
         money_u: body.money_u ? body.money_u : null,
+        pay: body.pay ? body.pay : null,
     }
     console.log(post)
    // post.length = post.length.join(',');

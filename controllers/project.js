@@ -66,6 +66,7 @@ exports.createProjects = (req, res, next) => {
     var { body } = req
     var post = {
         pj_id: body.pj_id,
+        pj_code: body.pj_code ? body.pj_code : null,
         name: body.name ? body.name : null,
         category_m: body.category_m ? body.category_m : null,
         category_mn: body.category_mn ? body.category_mn : null,
@@ -106,7 +107,7 @@ exports.createProjects = (req, res, next) => {
     }
     console.log(post)
    // post.length = post.length.join(',');
-    post.reply_date = post.reply_date.join('-');
+    // post.reply_date = post.reply_date.join('-');
     req.getConnection(function (err, connection) {
         connection.query("SELECT name FROM project_sum  WHERE name= ?", [post.name], function (err, results) {
             if (err) return next(err)

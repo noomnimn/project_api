@@ -82,6 +82,8 @@ module.exports = function (app) {
    app.get('/api/v1/project/department_data' , chart.department_data)
    app.get('/api/v1/project/sumaryBudget' , chart.sumaryBudget)
    app.get('/api/v1/project/sumaryBudgetOut' , chart.sumaryBudgetOut)
+   app.get('/api/project/sumMidYear' , chart.getSumBudgetMidYear)
+
 
    app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById) // ap
    app.get('/api/v1/project/projectCheck', check.findAll) // check //หน้าสถานะ
@@ -89,6 +91,8 @@ module.exports = function (app) {
 
    // getNewProject
    app.get('/api/v1/project/getnewproject', newproject.newproject) // check
+   app.get('/api/v1/project/getNewPjById/:id', newproject.getNewPjById) // check
+
    
     app.put('/api/v1/project/updateDateDt/:id', update.update_dateDt)
     app.put('/api/v1/project/updateDateSt/:id', update.update_dateSt)
@@ -100,6 +104,22 @@ module.exports = function (app) {
    app.get('/api/budget/findUC', budget2022.findUC) // check
    app.get('/api/budget/findHos', budget2022.findHosMoney) // check
    app.get('/api/budget/findDon', budget2022.findDonate) // check
+
+    //------------------------------------------------------------------------------------**งบลงทุน 2567
+    app.get('/api/budget/findAll_2567', budget2022.findAll2567) // check
+    app.get('/api/budget/findBudg_1', budget2022.findBudg_1) // check
+    app.get('/api/budget/findBudg_2', budget2022.findBudg_2) // check
+    app.get('/api/budget/findBudg_3', budget2022.findBudg_3) // check
+    app.get('/api/budget/Budget2567ById/:id', budget2022.findBudget2567ById)
+    app.put('/api/budget_2567/update/:id', budget2022.updateฺBudget2567)
+    app.post('/api/budget_2567/add', budget2022.addฺBudget2567)
+
+    //------------------------------------------------------------------------------------**แผนจัดซื้อจัดหา 2567
+    app.get('/api/budget/findUmat_1', budget2022.findUmat_1) // check
+    app.get('/api/budget/findUmatById/:id', budget2022.findUmatById)
+    app.put('/api/update_L2567/:id', budget2022.updateLow2567)
+    app.post('/api/add_L2567', budget2022.addLow2567)
+
 
    app.get('/api/budget/findBudgetById/:id', budget2022.findBudgetById)
    app.put('/api/updateBudget/:id', budget2022.updateBudget)
@@ -140,11 +160,20 @@ module.exports = function (app) {
     //----------------------------------------------------------สรุปงบลงทุน
     app.get('/api/findBudgetMoney/dashboard', budget2022.findBudgetMoney)
 
-    //----------------------------------------------------------นอกแผน
+    //----------------------------------------------------------นอกแผน2566
     app.get('/api/out/findAll', out.findAll)
     app.get('/api/out/findById/:id', out.findById)
     app.put('/api/updateOut/:id', out.updateOut)
     app.post('/api/addOut', out.addOut)
+    //----------------------------------------------------------นอกแผน2567
+    app.get('/api/out/findAllOut2567', out.findAllOut2567)
+    app.get('/api/out/findById2567/:id', out.findById2567)
+    app.put('/api/updateOut2567/:id', out.updateOut2567)
+    app.post('/api/addOut2567', out.addOut2567)
+
+
+
+
     app.put('/api/updateformPl/:id', budget2022.update_formPl)
     app.put('/api/updateformDt/:id', budget2022.update_formDt)
     app.put('/api/updateformSt/:id', budget2022.update_formSt)
@@ -159,4 +188,9 @@ module.exports = function (app) {
     app.put('/api/updateDonate/:id', donate.update)
     app.post('/api/addDonate', donate.add)
 
+    //------------------------------------------------ครุภัณฑ์นอกแผน
+    app.get('/api/out/findAll_L2567', out.findAll2567_LowOut)
+    app.get('/api/out/findById_L2567/:id', out.findId2567_LowOut)
+    app.put('/api/updateOut_L2567/:id', out.updateOutLow_2567)
+    app.post('/api/addOut_L2567', out.addOutLow_2567)
 }
