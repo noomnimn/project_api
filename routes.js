@@ -83,9 +83,14 @@ module.exports = function (app) {
    app.get('/api/v1/project/sumaryBudget' , chart.sumaryBudget)
    app.get('/api/v1/project/sumaryBudgetOut' , chart.sumaryBudgetOut)
    app.get('/api/project/sumMidYear' , chart.getSumBudgetMidYear)
+   app.get('/api/sumBudgetLower' , chart.getSumBudgetLower)         //แผนจัดหา
+   app.get('/api/summary/BudgetLower' , chart.summaryBudgetLow)         //แผนจัดหา
+   app.get('/api/sumBudgetLowerOut' , chart.getSumBudgetLowerOut)         //แผนจัดหา
+   app.get('/api/summary/BudgetLowerOut' , chart.summaryBudgetLowOut)         //แผนจัดหา
 
 
-   app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById) // ap
+
+   app.get('/api/v1/project/approvebyid/:id', allproject.findApproveById) // 
    app.get('/api/v1/project/projectCheck', check.findAll) // check //หน้าสถานะ
    app.get('/api/v1/project/projectCheck/:id', check.findprojectChById) // check
 

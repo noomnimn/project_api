@@ -177,10 +177,14 @@ exports.getSumBudgetMidYear = (req, res, next) => {
         if (err) return next(err)
         var sql = "SELECT p.money_so AS budget, " +
         "COUNT(`money_so`) AS total, (SUM(sum)) AS sumprice, " +
-        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS pend_b, " + 
-        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status  = 'พัสดุดำเนินการ' AND a.money_so = p.money_so ) AS sto, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS pend_b, " +
+        "(SELECT SUM(sum) FROM budget_2567 a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS sum_pend, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status = 'พัสดุดำเนินการ' AND a.money_so = p.money_so ) AS sto, " + 
+        "(SELECT SUM(sum) FROM budget_2567 a WHERE a.status = 'พัสดุดำเนินการ'  AND a.money_so = p.money_so ) AS sum_sto, " + 
         "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status = 'สิ้นสุดโครงการ' AND a.money_so = p.money_so ) AS end, " + 
-        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status = 'ยกเลิกรายการ' AND a.money_so = p.money_so ) AS cc_budg " +
+        "(SELECT SUM(sum) FROM budget_2567 a WHERE a.status = 'สิ้นสุดโครงการ'  AND a.money_so = p.money_so ) AS sum_end, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567 a WHERE a.status = 'ยกเลิกรายการ' AND a.money_so = p.money_so ) AS cc_budg, " +
+        "(SELECT SUM(sum) FROM budget_2567 a WHERE a.status = 'ยกเลิกรายการ'  AND a.money_so = p.money_so ) AS sum_cc " +
         "FROM `budget_2567` p WHERE status IS NULL OR status != 'ยกเลิกรายการ' " +
         "GROUP BY p.`money_so` ASC";
         connection.query(sql, (err, results) => {
@@ -198,10 +202,11 @@ exports.sumaryBudget = (req, res, next) => {
             "(SELECT COUNT(*) FROM budget_2567 WHERE status IS NULL) AS A1, " +
 			"(SELECT COUNT(*) FROM budget_2567 WHERE status ='พัสดุดำเนินการ') AS A2, " +
             "(SELECT COUNT(*) FROM budget_2567 WHERE status ='สิ้นสุดโครงการ') AS A3, " +
-			"(SELECT SUM(sum) FROM budget_2567 WHERE status IS NULL) AS B1, " +
-			"(SELECT SUM(sum) FROM budget_2567 WHERE status ='พัสดุดำเนินการ') AS B2, " +
-            "(SELECT SUM(sum) FROM budget_2567 WHERE status ='สิ้นสุดโครงการ') AS B3 " +
-            "FROM budget_2567 WHERE status IS NULL or `status` != 'ยกเลิกรายการ';";
+			"(SELECT SUM(sum) FROM budget_2567 WHERE status IS NULL) AS sum_pend, " +
+           "(SELECT SUM(sum) FROM budget_2567 WHERE status ='ยกเลิกรายการ') AS sum_canc, " +
+			"(SELECT SUM(sum) FROM budget_2567 WHERE status ='พัสดุดำเนินการ') AS sum_sto, " +
+            "(SELECT SUM(sum) FROM budget_2567 WHERE status ='สิ้นสุดโครงการ') AS sum_end " +
+            "FROM budget_2567;";
         connection.query(sql, (err, results) => {
             if (err) return next(err)
             res.send(results)
@@ -228,3 +233,91 @@ exports.sumaryBudgetOut = (req, res, next) => {
     })
 }
 
+
+
+//----------------------------------------------------------- ตารางครุภัณฑ์ต่ำกว่าเกณฑ์ 2567
+exports.getSumBudgetLower = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT p.money_so AS budget, " +
+        "COUNT(`money_so`) AS total, (SUM(sum)) AS sumprice, " +
+        "(SELECT COUNT(a.money_so) FROM budget_2567_lower a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS pend_b, " +
+        "(SELECT SUM(sum) FROM budget_2567_lower a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS sum_pend, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567_lower a WHERE a.status = 'พัสดุดำเนินการ' AND a.money_so = p.money_so ) AS sto, " + 
+        "(SELECT SUM(sum) FROM budget_2567_lower a WHERE a.status = 'พัสดุดำเนินการ'  AND a.money_so = p.money_so ) AS sum_sto, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567_lower a WHERE a.status = 'สิ้นสุดโครงการ' AND a.money_so = p.money_so ) AS end, " + 
+        "(SELECT SUM(sum) FROM budget_2567_lower a WHERE a.status = 'สิ้นสุดโครงการ'  AND a.money_so = p.money_so ) AS sum_end, " + 
+        "(SELECT COUNT(a.money_so) FROM budget_2567_lower a WHERE a.status = 'ยกเลิกรายการ' AND a.money_so = p.money_so ) AS cc_budg, " +
+        "(SELECT SUM(sum) FROM budget_2567_lower a WHERE a.status = 'ยกเลิกรายการ'  AND a.money_so = p.money_so ) AS sum_cc " +
+        "FROM `budget_2567_lower` p WHERE status IS NULL OR status != 'ยกเลิกรายการ' " +
+        "GROUP BY p.`money_so` ASC";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+
+//----------------------------------------------------------- รวมตารางครุภัณฑ์ต่ำกว่าเกณฑ์ ล่าง
+exports.summaryBudgetLow = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT SUM(sum) sum_total,COUNT(*) n, " +
+            "(SELECT COUNT(*) FROM budget_2567_lower WHERE status ='ยกเลิกรายการ') AS cc, " +
+            "(SELECT COUNT(*) FROM budget_2567_lower WHERE status IS NULL) AS A1, " +
+			"(SELECT COUNT(*) FROM budget_2567_lower WHERE status ='พัสดุดำเนินการ') AS A2, " +
+            "(SELECT COUNT(*) FROM budget_2567_lower WHERE status ='สิ้นสุดโครงการ') AS A3, " +
+			"(SELECT SUM(sum) FROM budget_2567_lower WHERE status IS NULL) AS sum_pend, " +
+           "(SELECT SUM(sum) FROM budget_2567_lower WHERE status ='ยกเลิกรายการ') AS sum_canc, " +
+			"(SELECT SUM(sum) FROM budget_2567_lower WHERE status ='พัสดุดำเนินการ') AS sum_sto, " +
+            "(SELECT SUM(sum) FROM budget_2567_lower WHERE status ='สิ้นสุดโครงการ') AS sum_end " +
+            "FROM budget_2567_lower;";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+
+//----------------------------------------------------------- ตารางครุภัณฑ์ต่ำกว่าเกณฑ์ 2567 นอกแผน
+exports.getSumBudgetLowerOut = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT p.money_so AS budget, " +
+        "COUNT(`money_so`) AS total, (SUM(sum)) AS sumprice, " +
+        "(SELECT COUNT(a.money_so) FROM 2567_lower_out a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS pend_b, " +
+        "(SELECT SUM(sum) FROM 2567_lower_out a WHERE a.status IS NULL AND a.money_so = p.money_so ) AS sum_pend, " + 
+        "(SELECT COUNT(a.money_so) FROM 2567_lower_out a WHERE a.status = 'พัสดุดำเนินการ' AND a.money_so = p.money_so ) AS sto, " + 
+        "(SELECT SUM(sum) FROM 2567_lower_out a WHERE a.status = 'พัสดุดำเนินการ'  AND a.money_so = p.money_so ) AS sum_sto, " + 
+        "(SELECT COUNT(a.money_so) FROM 2567_lower_out a WHERE a.status = 'สิ้นสุดโครงการ' AND a.money_so = p.money_so ) AS end, " + 
+        "(SELECT SUM(sum) FROM 2567_lower_out a WHERE a.status = 'สิ้นสุดโครงการ'  AND a.money_so = p.money_so ) AS sum_end, " + 
+        "(SELECT COUNT(a.money_so) FROM 2567_lower_out a WHERE a.status = 'ยกเลิกรายการ' AND a.money_so = p.money_so ) AS cc_budg, " +
+        "(SELECT SUM(sum) FROM 2567_lower_out a WHERE a.status = 'ยกเลิกรายการ'  AND a.money_so = p.money_so ) AS sum_cc " +
+        "FROM `2567_lower_out` p WHERE status IS NULL OR status != 'ยกเลิกรายการ' " +
+        "GROUP BY p.`money_so` ASC";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
+//----------------------------------------------------------- รวมตารางครุภัณฑ์ต่ำกว่าเกณฑ์ ล่าง นอกแผน สรุป
+exports.summaryBudgetLowOut = (req, res, next) => {
+    req.getConnection((err, connection) => {
+        if (err) return next(err)
+        var sql = "SELECT SUM(sum) sum_total,COUNT(*) n, " +
+            "(SELECT COUNT(*) FROM 2567_lower_out WHERE status ='ยกเลิกรายการ') AS cc, " +
+            "(SELECT COUNT(*) FROM 2567_lower_out WHERE status IS NULL) AS A1, " +
+			"(SELECT COUNT(*) FROM 2567_lower_out WHERE status ='พัสดุดำเนินการ') AS A2, " +
+            "(SELECT COUNT(*) FROM 2567_lower_out WHERE status ='สิ้นสุดโครงการ') AS A3, " +
+			"(SELECT SUM(sum) FROM 2567_lower_out WHERE status IS NULL) AS sum_pend, " +
+           "(SELECT SUM(sum) FROM 2567_lower_out WHERE status ='ยกเลิกรายการ') AS sum_canc, " +
+			"(SELECT SUM(sum) FROM 2567_lower_out WHERE status ='พัสดุดำเนินการ') AS sum_sto, " +
+            "(SELECT SUM(sum) FROM 2567_lower_out WHERE status ='สิ้นสุดโครงการ') AS sum_end " +
+            "FROM 2567_lower_out;";
+        connection.query(sql, (err, results) => {
+            if (err) return next(err)
+            res.send(results)
+        })
+    })
+}
